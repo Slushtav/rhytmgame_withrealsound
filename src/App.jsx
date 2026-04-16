@@ -22,6 +22,7 @@ function App() {
   const animationRef = useRef(null);
   const lastSpawnRef = useRef(0);
   const lastSoundRef = useRef(0);
+  const noteIdRef = useRef(0);
 
   const volume = useMicrophone(gameState === "playing");
 
@@ -36,8 +37,10 @@ function App() {
       // 🎵 SPAWN NOTE TERUS KE BAWAH
       if (time - lastSpawnRef.current > 900) {
         lastSpawnRef.current = time;
+        const id = noteIdRef.current;
 
-        setNotes((prev) => [...prev, time + 2000]);
+        noteIdRef.current += 1;
+        setNotes((prev) => [...prev, { id, targetTime: time + 2000 }]);
       }
 
       // 🔊 DETEKSI SUARA (biar ga ditahan "aaaaa")
@@ -50,21 +53,28 @@ function App() {
 
           // 🎯 CEK KENA NOTE
           setNotes((prevNotes) => {
-            return prevNotes.filter((note, index) => {
-              if (hitNotes.current.has(index)) return false;
+            return prevNotes.filter((note) => {
+              if (hitNotes.current.has(note.id)) return false;
 
-              const diff = Math.abs(time - note);
+              const diff = Math.abs(time - note.targetTime);
 
               // ✅ HIT VALID (harus ada suara + timing pas)
               if (diff < HIT_WINDOW) {
-                hitNotes.current.add(index);
+                hitNotes.current.add(note.id);
+                setHp((prev) => {
+                  const nextHp = Math.max(prev - DAMAGE, 0);
 
-                setHp((prev) => Math.max(prev - DAMAGE, 0));
+                  if (nextHp === 0) {
+                    setGameState("win");
+                  }
+
+                  return nextHp;
+                });
                 return false;
               }
 
               // ❌ MISS
-              if (time > note + HIT_WINDOW) {
+              if (time > note.targetTime + HIT_WINDOW) {
                 return false;
               }
 
@@ -76,7 +86,7 @@ function App() {
 
       // bersihin note lama
       setNotes((prev) =>
-        prev.filter((note) => time < note + 2000)
+        prev.filter((note) => time < note.targetTime + 2000)
       );
 
       animationRef.current = requestAnimationFrame(loop);
@@ -87,18 +97,13 @@ function App() {
     return () => cancelAnimationFrame(animationRef.current);
   }, [gameState, startTime, volume]);
 
-  // 🎉 WIN
-  useEffect(() => {
-    if (hp === 0) {
-      setGameState("win");
-    }
-  }, [hp]);
-
   // ▶️ START
   const startGame = () => {
     setHp(MAX_HP);
     setNotes([]);
+    setCurrentTime(0);
     hitNotes.current.clear();
+    noteIdRef.current = 0;
     lastSpawnRef.current = 0;
     lastSoundRef.current = 0;
     setStartTime(Date.now());
