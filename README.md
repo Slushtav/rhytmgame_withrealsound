@@ -38,29 +38,6 @@ npm run lint
 npm run build
 ```
 
-## Deploy to GitHub Pages
-
-This repository includes a workflow at `.github/workflows/deploy.yml` that deploys automatically when you push to `main`.
-
-1. Push this project to a GitHub repository.
-2. In GitHub, go to **Settings → Pages**.
-3. Under **Build and deployment**, set **Source** to **GitHub Actions**.
-4. Push to `main` (or run the workflow manually from the Actions tab).
-5. Your app will be available at:
-
-```text
-https://<your-github-username>.github.io/<your-repo-name>/
-```
-
-> The Vite `base` path is configured automatically in CI using `GITHUB_REPOSITORY`, so asset URLs work on Pages.
-
-### If deployment fails with `HttpError: Not Found (404)`
-
-This usually means GitHub Pages has not been enabled for the repository yet.
-
-- Open: `https://github.com/<your-username>/<your-repo>/settings/pages`
-- In **Build and deployment**, set **Source** to **GitHub Actions**
-- Save, then re-run the failed workflow from the **Actions** tab
 
 ## Project structure
 
