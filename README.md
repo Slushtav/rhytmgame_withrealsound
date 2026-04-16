@@ -1,4 +1,3 @@
- (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
 diff --git a/README.md b/README.md
 index 4601fe6cb3f4b9c3a288ec56ab15180432453c65..b72bd21cf19cf8300b719f0d0a72ddc4bec0ce6b 100644
 --- a/README.md
@@ -63,6 +62,3 @@ index 4601fe6cb3f4b9c3a288ec56ab15180432453c65..b72bd21cf19cf8300b719f0d0a72ddc4
 +## Notes
 +
 +This project currently uses plain JavaScript and inline styles for fast iteration.
- 
-EOF
-)
