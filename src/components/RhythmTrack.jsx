@@ -6,8 +6,8 @@ export default function RhythmTrack({ notes, currentTime }) {
     <div style={styles.container}>
       <div style={styles.hitLine}></div>
 
-      {notes.map((note, i) => {
-        const timeDiff = note - currentTime;
+      {notes.map((note) => {
+        const timeDiff = note.targetTime - currentTime;
 
         const y = HIT_LINE - timeDiff * SPEED;
 
@@ -15,7 +15,7 @@ export default function RhythmTrack({ notes, currentTime }) {
 
         return (
           <div
-            key={i}
+            key={note.id}
             style={{
               ...styles.note,
               transform: `translateY(${y}px)`,
