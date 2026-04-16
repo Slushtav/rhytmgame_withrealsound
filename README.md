@@ -54,6 +54,14 @@ https://<your-github-username>.github.io/<your-repo-name>/
 
 > The Vite `base` path is configured automatically in CI using `GITHUB_REPOSITORY`, so asset URLs work on Pages.
 
+### If deployment fails with `HttpError: Not Found (404)`
+
+This usually means GitHub Pages has not been enabled for the repository yet.
+
+- Open: `https://github.com/<your-username>/<your-repo>/settings/pages`
+- In **Build and deployment**, set **Source** to **GitHub Actions**
+- Save, then re-run the failed workflow from the **Actions** tab
+
 ## Project structure
 
 - `src/App.jsx`: core game loop and state
